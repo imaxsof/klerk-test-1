@@ -6,27 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, shrink-to-fit=no, viewport-fit=cover">
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="address=no">
+    <meta name="description" content="">
     <title>Klerk Test 1</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
 
   <body>
-    <div id="app">
-      <div>
-        <input
-          id="empty-rubric"
-          type="checkbox"
-          value="1"
-          v-model="isAllowEmpty">
+    <div id="app" class="p-6">
+      <div class="flex  gap-6">
+        <div>
+          <input
+            class="mr-2"
+            id="empty-rubric"
+            type="checkbox"
+            value="1"
+            v-model="isAllowEmpty">
 
-        <label for="empty-rubric">Отображать пустые рубрики</label>
+          <label for="empty-rubric">Отображать пустые рубрики</label>
+        </div>
+
+        <div>
+          Сумма count-ов: {{ sum }}
+        </div>
       </div>
 
-      <div>
-        Сумма count-ов: {{ sum }}
-      </div>
-
-      <ul>
+      <ul class="-ml-6  mt-6">
         <Item
           :id="0"
           title="Рубрики"
@@ -121,28 +126,48 @@
         }),
 
         template: `
-          <li>
-            <template v-if="url">
-              <input
-                type="checkbox"
-                aria-label="Выбрать"
-                value="1"
-                @change="$emit('check', $event.target.checked ? count : -count)">
+          <li class="pl-6">
+            <div class="flex">
+              <template v-if="url">
+                <input
+                  class="mr-2"
+                  type="checkbox"
+                  aria-label="Выбрать"
+                  value="1"
+                  @change="$emit('check', $event.target.checked ? count : -count)">
 
-              <a :href="'https://www.klerk.ru' + url">{{ title }}</a>
-              ({{ count }}{{ children.length !== 0 ? ', ' + total : null }})
-            </template>
+                <a
+                  class="text-blue-600  hover:text-red-600"
+                  :href="'https://www.klerk.ru' + url">
+                  {{ title }}
+                </a>
 
-            <template v-else>
-              {{ title }}
-            </template>
+                <span class="text-gray-400">
+                  ({{ count }}{{ children.length !== 0 ? ', ' + total : null }})
+                </span>
+              </template>
 
-            <button
-              v-if="children.length !== 0"
-              type="button"
-              @click="isCollapse = !isCollapse">
-              {{ isCollapse ? '-' : '+'}}
-            </button>
+              <template v-else>
+                {{ title }}
+              </template>
+
+              <button
+                v-if="children.length !== 0"
+                class="ml-2  text-gray-500  hover:text-gray-900"
+                type="button"
+                aria-label="Скрыть / Показать"
+                @click="isCollapse = !isCollapse">
+                <svg
+                  class="transition"
+                  :class="{ 'rotate-180': !isCollapse }"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  aria-hidden="true">
+                  <path class="fill-current" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm0 1.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17ZM7.47 9.97c.3-.3.77-.3 1.06 0L12 13.44l3.47-3.47a.75.75 0 1 1 1.06 1.06l-4 4c-.3.3-.77.3-1.06 0l-4-4a.75.75 0 0 1 0-1.06Z"></path>
+                </svg>
+              </button>
+            </div>
 
             <ul
               v-if="children.length !== 0"
